@@ -1,0 +1,751 @@
+Question 1: The Website Reverser (Stack)
+
+package reverse_words;
+public class ReverseWords {
+
+private int MaxSize,tos;
+private String stack[];
+
+   void createStack(int size)
+   {
+       MaxSize=size;
+       stack=new String[MaxSize];
+       tos=-1;
+   }
+   void push(String e)
+   {
+       stack[++tos]=e;
+   }
+   
+   void print_Stack()
+   {
+       for(int i=tos;i>=0;i--) {
+           System.out.println(stack[i]);
+       }
+   }
+
+}
+
+package reverse_words;
+
+import java.util.Scanner;
+
+public class ReverseWordsMain {
+    public static void main(String[] args) {        
+        ReverseWords rw = new ReverseWords();
+        String sentence = "Welcome to the Career Credentials Portal";
+       
+        String[] words = sentence.split("\\s+");
+       
+        rw.createStack(words.length);
+        for (String word : words) {
+            rw.push(word);
+        }
+       
+        rw.print_Stack();
+    }
+}
+
+--------------------------------------------------------------------------------------------------------------------------
+
+Question 2: IT Help-Desk Ticket System (Queue)
+
+package Questions;
+
+import java.util.LinkedList;
+import java.util.Queue;
+
+public class HelpDesk {
+
+	HNode root;
+	int r=-1;
+	int f=0;
+	Queue<String> ob=new LinkedList<>(); 
+	void newTicket(String employeeName, String issue)
+	{
+		String s="Processing ticket "+employeeName+" issue: "+issue;
+		
+		ob.add(s);	
+		
+	}
+	String processNextTicket()
+	{
+		if(!ob.isEmpty())
+		{
+			return ob.remove();
+		}
+		return ("error");
+	}
+	
+	boolean isEmpty()
+	{
+		if(!ob.isEmpty())
+		{
+			return false;
+		}
+		else
+			return true;
+	}
+	
+	public static void main(String[] args) {
+		
+		HelpDesk obj=new HelpDesk();
+		obj.newTicket("amar", "Printer not working");
+		obj.newTicket("Rohan", "Cannot connect to WiFi");
+		System.out.println(obj.processNextTicket());
+		obj.newTicket("Priya", "Password reset");
+		System.out.println(obj.processNextTicket());
+		System.out.println(obj.processNextTicket());
+		System.out.println(obj.processNextTicket());
+
+	}
+
+}
+---------------------------------------------------------------------------------------------------------------------------------
+
+Question 3: Hospital Emergency Room (Priority Queue)
+
+package hospital;
+
+import java.util.ArrayList;
+
+public class TriageSystem {
+    private static class Patient {
+        String name;
+        int priority;
+        int order;
+
+        public Patient(String name, int priority, int order) {
+            this.name = name;
+            this.priority = priority;
+            this.order = order;
+        }
+    }
+
+    private ArrayList<Patient> patients;
+    private int nextOrder;              
+
+    public TriageSystem() {
+        patients = new ArrayList<>();
+        nextOrder = 0;
+    }
+
+    public void addPatient(String patientName, int patientPriority) {
+        Patient newPatient = new Patient(patientName, patientPriority, nextOrder);
+        nextOrder++;
+        patients.add(newPatient);
+        int current = patients.size() - 1;
+
+        while (current > 0) {
+            int parent = (current - 1) / 2;
+            Patient currentPatient = patients.get(current);
+            Patient parentPatient = patients.get(parent);
+
+            if (currentPatient.priority < parentPatient.priority ||
+               (currentPatient.priority == parentPatient.priority &&
+                currentPatient.order < parentPatient.order)) {
+
+                // Swap
+                patients.set(current, parentPatient);
+                patients.set(parent, currentPatient);
+                current = parent;
+            } else {
+                break;
+            }
+        }
+    }
+
+    public String seeNextPatient() {
+        if (patients.isEmpty()) {
+            return "Error: No patients in the system.";
+        }
+
+        Patient firstPatient = patients.get(0);
+        Patient lastPatient = patients.remove(patients.size() - 1);
+
+        if (!patients.isEmpty()) {
+            patients.set(0, lastPatient);
+            int current = 0;
+            int size = patients.size();
+
+            while (true) {
+                int left = 2 * current + 1;
+                int right = 2 * current + 2;
+                int smallest = current;
+
+                if (left < size) {
+                    Patient leftPatient = patients.get(left);
+                    Patient smallestPatient = patients.get(smallest);
+
+                    if (leftPatient.priority < smallestPatient.priority ||
+                       (leftPatient.priority == smallestPatient.priority &&
+                        leftPatient.order < smallestPatient.order)) {
+                        smallest = left;
+                    }
+                }
+
+                if (right < size) {
+                    Patient rightPatient = patients.get(right);
+                    Patient smallestPatient = patients.get(smallest);
+
+                    if (rightPatient.priority < smallestPatient.priority ||
+                       (rightPatient.priority == smallestPatient.priority &&
+                        rightPatient.order < smallestPatient.order)) {
+                        smallest = right;
+                    }
+                }
+
+                if (smallest != current) {
+                    Patient temp = patients.get(current);
+                    patients.set(current, patients.get(smallest));
+                    patients.set(smallest, temp);
+                    current = smallest;
+                } else {
+                    break;
+                }
+            }
+        }
+
+        return "Seeing patient: " + firstPatient.name +
+               " (Priority " + firstPatient.priority + ")";
+    }
+
+    public boolean isEmpty() {
+        return patients.isEmpty();
+    }
+}
+
+package hospital;
+
+public class HospitalMain {
+    public static void main(String[] args) {
+
+        TriageSystem er = new TriageSystem();
+
+        er.addPatient("Sunil", 3);  // Stable
+        er.addPatient("Meera", 1);  // Critical
+        er.addPatient("Raj", 2);    // Serious
+        er.addPatient("Deepa", 1);  // Critical
+
+        System.out.println(er.seeNextPatient());
+        System.out.println(er.seeNextPatient());
+
+        er.addPatient("Amit", 5);  
+
+        System.out.println(er.seeNextPatient());
+        System.out.println(er.seeNextPatient());
+
+        if (er.isEmpty()) {
+            System.out.println("All patients have been seen.");
+        }
+    }
+}
+
+-------------------------------------------------------------------------------------------------
+
+Question 4: Web Browser History (Doubly Linked List)
+
+package browser;
+
+public class BrowserHistory {
+
+    private static class PNode {
+        String url;
+        PNode prev;
+        PNode next;
+
+        public PNode(String url) {
+            this.url = url;
+            this.prev = null;
+            this.next = null;
+        }
+    }
+
+    private PNode curr;
+
+    public BrowserHistory(String homePNode) {
+        curr = new PNode(homePNode);
+    }
+
+    public void visit(String url) {
+        PNode n = new PNode(url);
+        curr.next = n;  
+        n.prev = curr;
+        curr = n;
+    }
+
+    public void back(int steps) {
+        while (steps > 0 && curr.prev != null) {
+            curr = curr.prev;
+            steps--;
+        }
+    }
+
+    public void forward(int steps) {
+        while (steps > 0 && curr.next != null) {
+            curr = curr.next;
+            steps--;
+        }
+    }
+
+    public String getCurrentPage() {
+        return curr.url;
+    }
+}
+
+package browser;
+
+public class BrowserMain {
+    public static void main(String[] args) {
+        BrowserHistory history = new BrowserHistory("google.com");
+        history.visit("linkedin.com");
+        history.visit("careercredentials.in");
+        System.out.println(history.getCurrentPage());
+        history.back(1);
+        System.out.println(history.getCurrentPage());
+        history.back(1);
+        System.out.println(history.getCurrentPage());
+        history.back(1);
+        System.out.println(history.getCurrentPage());
+        history.forward(1);
+        System.out.println(history.getCurrentPage());
+        history.visit("youtube.com");
+        System.out.println(history.getCurrentPage());
+        history.forward(1);
+        System.out.println(history.getCurrentPage());
+        history.back(2);
+        System.out.println(history.getCurrentPage());
+    }
+}
+
+-------------------------------------------------------------------
+
+Question 5: Music Playlist Manager (Singly & Circular Linked List)
+
+package music;
+public class MusicPlaylist {
+    private static class SongNode {
+        String title;
+        SongNode next;
+
+        public SongNode(String title) {
+            this.title = title;
+            this.next = null;
+        }
+    }
+    private SongNode head;      
+    private SongNode tail;      
+    private SongNode current;  
+    private boolean repeatMode;  
+    public MusicPlaylist() {
+        head = null;
+        tail = null;
+        current = null;
+        repeatMode = false;
+    }
+    public void addSong(String songTitle) {
+        SongNode newSong = new SongNode(songTitle);
+        if (head == null) {
+            head = tail = newSong;
+        } else {
+            tail.next = newSong;
+            tail = newSong;
+        }
+        if (repeatMode) {
+            tail.next = head;
+        }
+        if (current == null) {
+            current = head;
+        }
+    }
+    public boolean removeSong(String songTitle) {
+        if (head == null) return false;
+        if (head.title.equals(songTitle)) {
+            if (head == tail) {
+                head = tail = current = null;
+            } else {
+                head = head.next;
+                if (repeatMode) tail.next = head;
+                if (current == head) current = head;
+            }
+            return true;
+        }
+        SongNode temp = head;
+        while (temp.next != null && !temp.next.title.equals(songTitle)) {
+            temp = temp.next;
+        }
+
+        if (temp.next == null) return false;
+
+        if (temp.next == tail) {
+            tail = temp;
+            tail.next = repeatMode ? head : null;
+        } else {
+            temp.next = temp.next.next;
+        }
+
+        return true;
+    }
+    public void displayPlaylist() {
+        System.out.println("Playlist:");
+        SongNode temp = head;
+        while (temp != null) {
+            System.out.println(temp.title);
+            if (temp == tail && repeatMode) break;
+            temp = temp.next;
+        }
+    }
+    public void setRepeat(boolean on) {
+        repeatMode = on;
+        if (tail != null) {
+            tail.next = repeatMode ? head : null;
+        }
+    }
+    public String playNext() {
+        if (current == null) {
+            if (repeatMode && head != null) {
+                current = head;
+            } else {
+                return "Playlist finished.";
+            }
+        }
+        String songPlaying = "Playing: " + current.title;
+        if (current.next != null) {
+            current = current.next;
+        } else {
+            if (repeatMode) {
+                current = head;
+            } else {
+                current = null;
+            }
+        }
+        return songPlaying;
+    }
+}
+
+package music;
+
+public class MusicMain {
+    public static void main(String[] args) {
+        MusicPlaylist player = new MusicPlaylist();
+        player.addSong("Song A");
+        player.addSong("Song B");
+        player.addSong("Song C");
+        player.displayPlaylist();
+        System.out.println("\nPlaying normal:");
+        System.out.println(player.playNext());
+        System.out.println(player.playNext());
+        System.out.println(player.playNext());
+        System.out.println(player.playNext());
+        System.out.println("\nSetting repeat:");
+        player.setRepeat(true);
+        System.out.println(player.playNext());
+        System.out.println(player.playNext());
+        System.out.println(player.playNext());
+        System.out.println(player.playNext());
+    }
+}
+
+------------------------------------------------------------------------------------------------
+
+Question 6: The Code Syntax Checker (Stack)
+
+package syntax;
+import java.util.Stack;
+
+public class SyntaxChecker {
+
+    public static boolean isValidSyntax(String codeSnippet) {
+        Stack<Character> stack = new Stack<>();
+        for (int i = 0; i < codeSnippet.length(); i++) {
+            char c = codeSnippet.charAt(i);
+
+            if (c == '(' || c == '{' || c == '[') {
+                stack.push(c);
+            } else if (c == ')' || c == '}' || c == ']') {
+                if (stack.isEmpty()) {
+                    return false;
+                }
+                char top = stack.pop();
+                if ((c == ')' && top != '(') ||
+                    (c == '}' && top != '{') ||
+                    (c == ']' && top != '[')) {
+                    return false;
+                }
+            }
+        }
+        return stack.isEmpty();
+    }
+
+    public static void main(String[] args) {
+        String code1 = "public static void main(String[] args) { int x = (5 + 3); }";
+        String code2 = "function myFunc(arr) { return arr[0]; )";
+        String code3 = "list.add( (map.get(key] ) )";
+        System.out.println(isValidSyntax(code1));
+        System.out.println(isValidSyntax(code2));
+        System.out.println(isValidSyntax(code3));
+    }
+}
+
+----------------------------------------------------------------------------------------------------------------
+
+Question 7: Merge Sorted Playlists (Singly Linked List)
+
+package music;
+
+
+class Node {
+    String song;
+    Node next;
+    Node(String song) {
+        this.song = song;
+        this.next = null;
+    }
+}
+
+public class MergePlaylists {
+
+    public static Node mergePlaylists(Node listA, Node listB) {
+        Node dummy = new Node("");
+        Node current = dummy;
+
+        while (listA != null && listB != null) {
+            if (listA.song.compareTo(listB.song) <= 0) {
+                current.next = listA;
+                listA = listA.next;
+            } else {
+                current.next = listB;
+                listB = listB.next;
+            }
+            current = current.next;
+        }
+
+        if (listA != null) {
+            current.next = listA;
+        }
+        if (listB != null) {
+            current.next = listB;
+        }
+
+        return dummy.next;
+    }
+
+    public static void printList(Node head) {
+        Node temp = head;
+        while (temp != null) {
+            System.out.print(temp.song);
+            if (temp.next != null) {
+                System.out.print(" -> ");
+            }
+            temp = temp.next;
+        }
+        System.out.println();
+    }
+
+    public static void main(String[] args) {
+        Node listA = new Node("Abba");
+        listA.next = new Node("Coldplay");
+        listA.next.next = new Node("Zeppelin");
+
+        Node listB = new Node("Beatles");
+        listB.next = new Node("Queen");
+
+        Node merged = mergePlaylists(listA, listB);
+        printList(merged);
+    }
+}
+
+-------------------------------------------------------------------------------------------------
+
+Question 8: The "Round Robin" Task Scheduler (Circular Linked List)
+
+package task_scheduler;
+
+class TaskNode {
+    String name;
+    TaskNode next;
+    TaskNode(String name) {
+        this.name = name;
+        this.next = null;
+    }
+}
+
+public class TaskScheduler {
+    TaskNode head;
+    TaskNode current;
+
+    public TaskScheduler() {
+        head = null;
+        current = null;
+    }
+
+    public void addTask(String taskName) {
+        TaskNode newTask = new TaskNode(taskName);
+        if (head == null) {
+            head = newTask;
+            newTask.next = head;
+            current = head;
+        } else {
+            TaskNode temp = head;
+            while (temp.next != head) {
+                temp = temp.next;
+            }
+            temp.next = newTask;
+            newTask.next = head;
+        }
+    }
+
+    public void runNextTask() {
+        if (current == null) {
+            System.out.println("No tasks in scheduler");
+            return;
+        }
+        System.out.println("Running: " + current.name);
+        current = current.next;
+    }
+
+    public static void main(String[] args) {
+        TaskScheduler scheduler = new TaskScheduler();
+        scheduler.addTask("Task A - (Word Processor)");
+        scheduler.addTask("Task B - (Web Browser)");
+        scheduler.addTask("Task C - (Music Player)");
+
+        scheduler.runNextTask();
+        scheduler.runNextTask();
+        scheduler.runNextTask();
+        scheduler.runNextTask();
+
+        scheduler.addTask("Task D - (Compiler)");
+
+        scheduler.runNextTask();
+        scheduler.runNextTask();
+        scheduler.runNextTask();
+        scheduler.runNextTask();
+    }
+}
+
+------------------------------------------------------------------------------------------
+
+Question 9: The "Min Stack" (Advanced Stack)
+
+package minstack;
+
+import java.util.Stack;
+
+public class MinStack {
+    private Stack<Integer> mainStack;
+    private Stack<Integer> minStack;
+
+    public MinStack() {
+        mainStack = new Stack<>();
+        minStack = new Stack<>();
+    }
+
+    public void push(int price) {
+        mainStack.push(price);
+        if (minStack.isEmpty() || price <= minStack.peek()) {
+            minStack.push(price);
+        }
+    }
+
+    public void pop() {
+        if (!mainStack.isEmpty()) {
+            int removed = mainStack.pop();
+            if (removed == minStack.peek()) {
+                minStack.pop();
+            }
+        }
+    }
+
+    public int top() {
+        if (!mainStack.isEmpty()) {
+            return mainStack.peek();
+        }
+        return -1;
+    }
+
+    public int getMin() {
+        if (!minStack.isEmpty()) {
+            return minStack.peek();
+        }
+        return -1;
+    }
+
+    public static void main(String[] args) {
+        MinStack stockTracker = new MinStack();
+        stockTracker.push(150);
+        stockTracker.push(160);
+        System.out.println(stockTracker.getMin());
+        stockTracker.push(140);
+        System.out.println(stockTracker.getMin());
+        stockTracker.push(145);
+        System.out.println(stockTracker.getMin());
+        stockTracker.pop();
+        System.out.println(stockTracker.getMin());
+        stockTracker.pop();
+        System.out.println(stockTracker.getMin());
+    }
+}
+
+------------------------------------------------------------------------------------------------------------------------
+
+Question 10: Find the Corrupted Data (Linked List Cycle Detection)
+
+package linkedlistcycle;
+
+class Node {
+    String data;
+    Node next;
+
+    public Node(String data) {
+        this.data = data;
+        this.next = null;
+    }
+}
+
+public class CycleDetector {
+
+    public static boolean hasCycle(Node head) {
+        if (head == null) {
+            return false;
+        }
+
+        Node slow = head;
+        Node fast = head;
+
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+
+            if (slow == fast) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static void main(String[] args) {
+        Node a = new Node("A");
+        Node b = new Node("B");
+        Node c = new Node("C");
+
+        a.next = b;
+        b.next = c;
+        c.next = null;
+
+        System.out.println(hasCycle(a));
+
+        Node x = new Node("X");
+        Node y = new Node("Y");
+        Node z = new Node("Z");
+        Node w = new Node("W");
+
+        x.next = y;
+        y.next = z;
+        z.next = w;
+        w.next = y;
+
+        System.out.println(hasCycle(x));
+    }
+}
